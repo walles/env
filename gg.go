@@ -34,3 +34,15 @@ func GetOr[R any](environmentVariableName string, parse func(string) (R, error),
 
 	return parsedValue
 }
+
+// Get a value from environment and run it through the parse function. Return
+// the result if there was one, or panic if the parsing fails or if the variable
+// was not set.
+func MustGet[R any](environmentVariableName string, parse func(string) (R, error)) R {
+	parsedValue, err := Get(environmentVariableName, parse)
+	if err != nil {
+		panic(err)
+	}
+
+	return parsedValue
+}
