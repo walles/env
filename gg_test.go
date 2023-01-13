@@ -8,6 +8,23 @@ import (
 	"github.com/matryer/is"
 )
 
+func TestGetInt(t *testing.T) {
+	is := is.New(t)
+
+	is.NoErr(os.Setenv("TEST", "1234"))
+	value, err := Get("TEST", strconv.Atoi)
+	is.NoErr(err)
+	is.Equal(1234, value)
+
+	is.NoErr(os.Setenv("TEST", "kalaspuffar"))
+	_, err = Get("TEST", strconv.Atoi)
+	is.True(err != nil)
+
+	is.NoErr(os.Unsetenv("TEST"))
+	_, err = Get("TEST", strconv.Atoi)
+	is.True(err != nil)
+}
+
 func TestGetOrInt(t *testing.T) {
 	is := is.New(t)
 
