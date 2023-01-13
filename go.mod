@@ -1,4 +1,4 @@
-module github.com/walles/gg
+module github.com/walles/env
 
 go 1.18
 
