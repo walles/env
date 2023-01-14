@@ -8,10 +8,10 @@ import (
 // Get a value from environment and run it through the parse function. Return
 // the result if there was one, or an error if the parsing fails or if the
 // variable was not set.
-func Get[R any](environmentVariableName string, parse func(string) (R, error)) (R, error) {
+func Get[V any](environmentVariableName string, parse func(string) (V, error)) (V, error) {
 	rawValue, found := os.LookupEnv(environmentVariableName)
 	if !found {
-		var noResult R
+		var noResult V
 		return noResult, fmt.Errorf("Environment variable not set: %s", environmentVariableName)
 	}
 
@@ -21,7 +21,7 @@ func Get[R any](environmentVariableName string, parse func(string) (R, error)) (
 // Get a value from environment and run it through the parse function. Return
 // the result if there was one, fallback if the parsing fails or if the variable
 // was not set.
-func GetOr[R any](environmentVariableName string, parse func(string) (R, error), fallback R) R {
+func GetOr[V any](environmentVariableName string, parse func(string) (V, error), fallback V) V {
 	rawValue, found := os.LookupEnv(environmentVariableName)
 	if !found {
 		return fallback
@@ -38,7 +38,7 @@ func GetOr[R any](environmentVariableName string, parse func(string) (R, error),
 // Get a value from environment and run it through the parse function. Return
 // the result if there was one, or panic if the parsing fails or if the variable
 // was not set.
-func MustGet[R any](environmentVariableName string, parse func(string) (R, error)) R {
+func MustGet[V any](environmentVariableName string, parse func(string) (V, error)) V {
 	parsedValue, err := Get(environmentVariableName, parse)
 	if err != nil {
 		panic(err)
