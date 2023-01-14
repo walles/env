@@ -3,7 +3,6 @@ package env
 import (
 	"os"
 	"strconv"
-	"strings"
 	"testing"
 
 	"github.com/matryer/is"
@@ -107,7 +106,7 @@ func TestMustGetIntParseError(t *testing.T) {
 
 		err, ok := r.(error)
 		is.True(ok)
-		is.True(strings.Contains(err.Error(), "kalaspuffar"))
+		is.Equal(err.Error(), `Parsing TEST value: strconv.Atoi: parsing "kalaspuffar": invalid syntax`)
 	}()
 	MustGet("TEST", strconv.Atoi)
 
