@@ -88,3 +88,12 @@ func ListOf[V any](parse func(string) (V, error), separator string) func(string)
 		return result, nil
 	}
 }
+
+// Helper function for reading strings from the environment.
+//
+// # Example Usage
+//
+//	userName, err := env.Get("USERNAME", env.Plain)
+func Plain(input string) (string, error) {
+	return input, nil
+}

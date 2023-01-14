@@ -60,6 +60,16 @@ func TestGetOrInt(t *testing.T) {
 	is.Equal(13, GetOr("TEST", strconv.Atoi, 13))
 }
 
+func TestGetOrString(t *testing.T) {
+	is := is.New(t)
+
+	is.NoErr(os.Setenv("TEST", "Hello"))
+	is.Equal("Hello", GetOr("TEST", Plain, "??"))
+
+	is.NoErr(os.Unsetenv("TEST"))
+	is.Equal("??", GetOr("TEST", Plain, "??"))
+}
+
 func TestMustGetIntHappy(t *testing.T) {
 	is := is.New(t)
 
