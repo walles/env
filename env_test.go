@@ -82,6 +82,22 @@ func TestGetOrFloat64(t *testing.T) {
 	is.Equal(13.0, GetOr("TEST", WithBitSize(strconv.ParseFloat, 64), 13))
 }
 
+func TestGetOrHexInt(t *testing.T) {
+	is := is.New(t)
+
+	is.NoErr(os.Setenv("TEST", "C0de"))
+	is.Equal(int64(0xc0de), GetOr("TEST", WithBaseAndBitSize(strconv.ParseInt, 16, 64), 13))
+
+	is.NoErr(os.Setenv("TEST", "0xC0de"))
+	is.Equal(int64(0xc0de), GetOr("TEST", WithBaseAndBitSize(strconv.ParseInt, 0, 64), 13))
+
+	is.NoErr(os.Setenv("TEST", "kalaspuffar"))
+	is.Equal(int64(13), GetOr("TEST", WithBaseAndBitSize(strconv.ParseInt, 16, 64), 13))
+
+	is.NoErr(os.Unsetenv("TEST"))
+	is.Equal(int64(13), GetOr("TEST", WithBaseAndBitSize(strconv.ParseInt, 16, 64), 13))
+}
+
 func TestMustGetIntHappy(t *testing.T) {
 	is := is.New(t)
 

@@ -20,6 +20,11 @@ luckyNumbers, err := env.Get("LUCKY_NUMBERS", env.ListOf(strconv.Atoi, ","))
 
 // FluffyNumber will be a 64 bit precision float
 fluffyNumber, err := env.Get("FLOAT", env.WithBitSize(strconv.ParseFloat, 64))
+
+// This will parse both hex and decimal into an uint64
+//
+// Some allowed number formats: 0xC0de, 1234
+number, err := env.Get("HEX", env.WithBaseAndBitSize(strconv.ParseUint, 0, 64))
 ```
 
 # Alternatives

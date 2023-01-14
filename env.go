@@ -100,6 +100,24 @@ func WithBitSize[V any](parse func(string, int) (V, error), bitSize int) func(st
 	}
 }
 
+// Helper function for parsing ints of different bases from environment
+// variables.
+//
+// Pro tip: Passing base 0 with [strconv.ParseInt] and [strconv.ParseUint]
+// will make them try to figure out the base by themselves.
+//
+// # Example Usage
+//
+//	number, err := env.Get("HEX", env.WithBaseAndBitSize(strconv.ParseUint, 0, 64))
+//
+// [strconv.ParseInt]: https://pkg.go.dev/strconv#ParseInt
+// [strconv.ParseUint]: https://pkg.go.dev/strconv#ParseUint
+func WithBaseAndBitSize[V any](parse func(string, int, int) (V, error), base, bitSize int) func(string) (V, error) {
+	return func(raw string) (V, error) {
+		return parse(raw, base, bitSize)
+	}
+}
+
 // Helper function for reading strings from the environment.
 //
 // # Example Usage
