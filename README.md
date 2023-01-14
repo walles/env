@@ -1,4 +1,4 @@
-Functions for parsing environment variable values into typed values.
+Functions for parsing environment variable values into typed variables.
 
 # Examples
 
