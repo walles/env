@@ -5,6 +5,8 @@ Functions for parsing environment variable values into typed variables.
 Note that the resulting values are all typed.
 
 ```go
+import "github.com/walles/env"
+
 // Enabled will be of type bool
 enabled := env.GetOr("ENABLED", strconv.ParseBool, false)
 
@@ -25,6 +27,14 @@ fluffyNumber, err := env.Get("FLOAT", env.WithBitSize(strconv.ParseFloat, 64))
 //
 // Some allowed number formats: 0xC0de, 1234
 number, err := env.Get("HEX", env.WithBaseAndBitSize(strconv.ParseUint, 0, 64))
+```
+
+# Installing
+
+To add to your `go.mod` file:
+
+```
+go get github.com/walles/env
 ```
 
 # Alternatives
