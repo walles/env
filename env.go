@@ -7,8 +7,10 @@ import (
 )
 
 // Get a value from environment and run it through the parse function. Return
-// the result if there was one, or an error if the parsing fails or if the
-// variable was not set.
+// the result if there was one.
+//
+// If the parsing fails or if the variable was not set an error will be
+// returned.
 //
 // # Example Usage
 //
@@ -30,8 +32,10 @@ func Get[V any](environmentVariableName string, parse func(string) (V, error)) (
 }
 
 // Get a value from environment and run it through the parse function. Return
-// the result if there was one, fallback if the parsing fails or if the variable
-// was not set.
+// the result if there was one.
+//
+// If the parsing fails or if the variable was not set then the fallback value
+// will be returned.
 //
 // # Example Usage
 //
@@ -51,8 +55,10 @@ func GetOr[V any](environmentVariableName string, parse func(string) (V, error),
 }
 
 // Get a value from environment and run it through the parse function. Return
-// the result if there was one, or panic if the parsing fails or if the variable
-// was not set.
+// the result if there was one.
+//
+// If the parsing fails or if the variable was not set then this function will
+// panic.
 //
 // # Example Usage
 //
