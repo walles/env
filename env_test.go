@@ -1,4 +1,4 @@
-package gg
+package env
 
 import (
 	"os"
