@@ -89,6 +89,17 @@ func ListOf[V any](parse func(string) (V, error), separator string) func(string)
 	}
 }
 
+// Helper function for parsing floats and similar from environment variables.
+//
+// # Example Usage
+//
+//	number, err := env.Get("FLOAT", env.WithBitSize(strconv.ParseFloat, 64))
+func WithBitSize[V any](parse func(string, int) (V, error), bitSize int) func(string) (V, error) {
+	return func(raw string) (V, error) {
+		return parse(raw, bitSize)
+	}
+}
+
 // Helper function for reading strings from the environment.
 //
 // # Example Usage

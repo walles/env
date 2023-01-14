@@ -69,6 +69,19 @@ func TestGetOrString(t *testing.T) {
 	is.Equal("??", GetOr("TEST", Plain, "??"))
 }
 
+func TestGetOrFloat64(t *testing.T) {
+	is := is.New(t)
+
+	is.NoErr(os.Setenv("TEST", "1.23"))
+	is.Equal(1.23, GetOr("TEST", WithBitSize(strconv.ParseFloat, 64), 13))
+
+	is.NoErr(os.Setenv("TEST", "kalaspuffar"))
+	is.Equal(13.0, GetOr("TEST", WithBitSize(strconv.ParseFloat, 64), 13))
+
+	is.NoErr(os.Unsetenv("TEST"))
+	is.Equal(13.0, GetOr("TEST", WithBitSize(strconv.ParseFloat, 64), 13))
+}
+
 func TestMustGetIntHappy(t *testing.T) {
 	is := is.New(t)
 
