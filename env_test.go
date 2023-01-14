@@ -19,11 +19,28 @@ func TestGetInt(t *testing.T) {
 
 	is.NoErr(os.Setenv("TEST", "kalaspuffar"))
 	_, err = Get("TEST", strconv.Atoi)
-	is.True(err != nil)
+	is.True(err != nil) // FIXME: Verify the actual error message as well!
 
 	is.NoErr(os.Unsetenv("TEST"))
 	_, err = Get("TEST", strconv.Atoi)
-	is.True(err != nil)
+	is.True(err != nil) // FIXME: Verify the actual error message as well!
+}
+
+func TestGetListOfInts(t *testing.T) {
+	is := is.New(t)
+
+	is.NoErr(os.Setenv("TEST", "1,2,3,4"))
+	value, err := Get("TEST", ListOf(strconv.Atoi, ","))
+	is.NoErr(err)
+	is.Equal([]int{1, 2, 3, 4}, value)
+
+	is.NoErr(os.Setenv("TEST", "kalaspuffar"))
+	_, err = Get("TEST", ListOf(strconv.Atoi, ","))
+	is.True(err != nil) // FIXME: Verify the actual error message as well!
+
+	is.NoErr(os.Unsetenv("TEST"))
+	_, err = Get("TEST", ListOf(strconv.Atoi, ","))
+	is.True(err != nil) // FIXME: Verify the actual error message as well!
 }
 
 func TestGetOrInt(t *testing.T) {

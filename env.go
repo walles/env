@@ -3,6 +3,7 @@ package env
 import (
 	"fmt"
 	"os"
+	"strings"
 )
 
 // Get a value from environment and run it through the parse function. Return
@@ -57,4 +58,27 @@ func MustGet[V any](environmentVariableName string, parse func(string) (V, error
 	}
 
 	return parsedValue
+}
+
+// Helper function for reading lists from environment variables.
+//
+// # Example Usage
+//
+//	numbers, err := env.Get("NUMBERS", env.ListOf(strconv.Atoi, ","))
+func ListOf[V any](parse func(string) (V, error), separator string) func(string) ([]V, error) {
+	return func(stringWithSeparators string) ([]V, error) {
+		separatedString := strings.Split(stringWithSeparators, separator)
+
+		var result []V
+		for _, part := range separatedString {
+			parsedValue, err := parse(part)
+			if err != nil {
+				return nil, err
+			}
+
+			result = append(result, parsedValue)
+		}
+
+		return result, nil
+	}
 }
