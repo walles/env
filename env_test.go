@@ -19,11 +19,13 @@ func TestGetInt(t *testing.T) {
 
 	is.NoErr(os.Setenv("TEST", "kalaspuffar"))
 	_, err = Get("TEST", strconv.Atoi)
-	is.True(err != nil) // FIXME: Verify the actual error message as well!
+	is.True(err != nil)
+	is.Equal(err.Error(), `Parsing TEST value: strconv.Atoi: parsing "kalaspuffar": invalid syntax`)
 
 	is.NoErr(os.Unsetenv("TEST"))
 	_, err = Get("TEST", strconv.Atoi)
-	is.True(err != nil) // FIXME: Verify the actual error message as well!
+	is.True(err != nil)
+	is.Equal(err.Error(), "Environment variable not set: TEST")
 }
 
 func TestGetListOfInts(t *testing.T) {
@@ -36,11 +38,13 @@ func TestGetListOfInts(t *testing.T) {
 
 	is.NoErr(os.Setenv("TEST", "kalaspuffar"))
 	_, err = Get("TEST", ListOf(strconv.Atoi, ","))
-	is.True(err != nil) // FIXME: Verify the actual error message as well!
+	is.True(err != nil)
+	is.Equal(err.Error(), `Parsing TEST value: Element 1: strconv.Atoi: parsing "kalaspuffar": invalid syntax`)
 
 	is.NoErr(os.Unsetenv("TEST"))
 	_, err = Get("TEST", ListOf(strconv.Atoi, ","))
-	is.True(err != nil) // FIXME: Verify the actual error message as well!
+	is.True(err != nil)
+	is.Equal(err.Error(), "Environment variable not set: TEST")
 }
 
 func TestGetOrInt(t *testing.T) {

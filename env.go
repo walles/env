@@ -20,7 +20,13 @@ func Get[V any](environmentVariableName string, parse func(string) (V, error)) (
 		return noResult, fmt.Errorf("Environment variable not set: %s", environmentVariableName)
 	}
 
-	return parse(rawValue)
+	parsedValue, err := parse(rawValue)
+	if err != nil {
+		var noResult V
+		return noResult, fmt.Errorf("Parsing %s value: %w", environmentVariableName, err)
+	}
+
+	return parsedValue, nil
 }
 
 // Get a value from environment and run it through the parse function. Return
@@ -70,10 +76,10 @@ func ListOf[V any](parse func(string) (V, error), separator string) func(string)
 		separatedString := strings.Split(stringWithSeparators, separator)
 
 		var result []V
-		for _, part := range separatedString {
+		for index, part := range separatedString {
 			parsedValue, err := parse(part)
 			if err != nil {
-				return nil, err
+				return nil, fmt.Errorf("Element %d: %w", index+1, err)
 			}
 
 			result = append(result, parsedValue)
