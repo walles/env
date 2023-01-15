@@ -1,3 +1,5 @@
+![CI Status](https://github.com/walles/env/actions/workflows/ci.yml/badge.svg?branch=main)
+
 Functions for parsing environment variable values into typed variables.
 
 # Examples
