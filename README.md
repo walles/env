@@ -15,7 +15,7 @@ duration, err := env.Get("PORT", time.ParseDuration)
 
 // Username will be of type string. If it's not set in the environment,
 // then MustGet will panic.
-username := env.MustGet("USERNAME", env.Plain)
+username := env.MustGet("USERNAME", env.String)
 
 // LuckyNumbers will be of type []int
 luckyNumbers, err := env.Get("LUCKY_NUMBERS", env.ListOf(strconv.Atoi, ","))

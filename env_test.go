@@ -63,10 +63,10 @@ func TestGetOrString(t *testing.T) {
 	is := is.New(t)
 
 	is.NoErr(os.Setenv("TEST", "Hello"))
-	is.Equal("Hello", GetOr("TEST", Plain, "??"))
+	is.Equal("Hello", GetOr("TEST", String, "??"))
 
 	is.NoErr(os.Unsetenv("TEST"))
-	is.Equal("??", GetOr("TEST", Plain, "??"))
+	is.Equal("??", GetOr("TEST", String, "??"))
 }
 
 func TestGetOrFloat64(t *testing.T) {

@@ -128,7 +128,7 @@ func WithBaseAndBitSize[V any](parse func(string, int, int) (V, error), base, bi
 //
 // # Example Usage
 //
-//	userName, err := env.Get("USERNAME", env.Plain)
-func Plain(input string) (string, error) {
+//	userName, err := env.Get("USERNAME", env.String)
+func String(input string) (string, error) {
 	return input, nil
 }
