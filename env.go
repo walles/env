@@ -124,6 +124,20 @@ func WithBaseAndBitSize[V any](parse func(string, int, int) (V, error), base, bi
 	}
 }
 
+// Helper function for parsing timestamps using [time.Parse] from environment
+// variables.
+//
+// # Example Usage
+//
+//	timestamp, err := Get("TEST", WithTimeSpec(time.Parse, time.RFC3339))
+//
+// [time.Parse]: https://pkg.go.dev/time#Parse
+func WithTimeSpec[V any](parse func(string, string) (V, error), layout string) func(string) (V, error) {
+	return func(raw string) (V, error) {
+		return parse(layout, raw)
+	}
+}
+
 // Helper function for reading strings from the environment.
 //
 // # Example Usage

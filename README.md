@@ -29,6 +29,9 @@ fluffyNumber, err := env.Get("FLOAT", env.WithBitSize(strconv.ParseFloat, 64))
 //
 // Some allowed number formats: 0xC0de, 1234
 number, err := env.Get("HEX", env.WithBaseAndBitSize(strconv.ParseUint, 0, 64))
+
+// Timestamp will be of type time.Time
+timestamp, err := Get("TIMESTAMP", WithTimeSpec(time.Parse, time.RFC3339))
 ```
 
 # Installing

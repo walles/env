@@ -4,6 +4,7 @@ import (
 	"os"
 	"strconv"
 	"testing"
+	"time"
 
 	"github.com/matryer/is"
 )
@@ -140,4 +141,17 @@ func TestMustGetIntParseError(t *testing.T) {
 	MustGet("TEST", strconv.Atoi)
 
 	is.Fail() // MustGet with unparsable variable value should have panicked
+}
+
+func TestGetTimestamp(t *testing.T) {
+	is := is.New(t)
+
+	timeString := "2022-03-04T05:06:07+08:00"
+	is.NoErr(os.Setenv("TEST", timeString))
+
+	parsed, err := Get("TEST", WithTimeSpec(time.Parse, time.RFC3339))
+	is.NoErr(err)
+
+	location := time.FixedZone("UTC+8", 8*60*60)
+	is.True(parsed.Equal(time.Date(2022, 3, 4, 5, 6, 7, 0, location)))
 }
