@@ -32,6 +32,11 @@ number, err := env.Get("HEX", env.WithBaseAndBitSize(strconv.ParseUint, 0, 64))
 
 // Timestamp will be of type time.Time
 timestamp, err := Get("TIMESTAMP", WithTimeSpec(time.Parse, time.RFC3339))
+
+// UsersAndScores will be of type map[string]int.
+//
+// In this case, "Adam:50,Eva:60" will be parsed into { "Adam":50, "Eva":60 }.
+usersAndScores, err := Get("USERS_AND_SCORES", Map(String, ":", strconv.Atoi, ","))
 ```
 
 # Installing

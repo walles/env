@@ -95,6 +95,54 @@ func ListOf[V any](parse func(string) (V, error), separator string) func(string)
 	}
 }
 
+// Helper function for reading maps from environment variables.
+//
+// # Example Usage
+//
+// This can be used to parse a string of the form "a:5,b:9,c:42":
+//
+//	mapping, err := env.Get("MAPPING", env.Map(env.String, ":", strconv.Atoi, ","))
+func Map[K comparable, V any](
+	parseKey func(string) (K, error),
+	keyValueSeparator string,
+	parseValue func(string) (V, error),
+	entriesSeparator string,
+) func(string) (map[K]V, error) {
+	return func(stringWithMap string) (map[K]V, error) {
+		entries := strings.Split(stringWithMap, entriesSeparator)
+
+		result := make(map[K]V)
+		var empty map[K]V
+		for index, entry := range entries {
+			rawKeyAndValue := strings.Split(entry, keyValueSeparator)
+			if len(rawKeyAndValue) != 2 {
+				return empty, fmt.Errorf(`Element %d doesn't have exactly one separator ("%s"): %s`,
+					index+1,
+					keyValueSeparator,
+					entry,
+				)
+			}
+
+			rawKey := rawKeyAndValue[0]
+			rawValue := rawKeyAndValue[1]
+
+			parsedKey, err := parseKey(rawKey)
+			if err != nil {
+				return empty, fmt.Errorf("Key %d: %w", index+1, err)
+			}
+
+			parsedValue, err := parseValue(rawValue)
+			if err != nil {
+				return empty, fmt.Errorf("Value %d: %w", index+1, err)
+			}
+
+			result[parsedKey] = parsedValue
+		}
+
+		return result, nil
+	}
+}
+
 // Helper function for parsing floats and similar from environment variables.
 //
 // # Example Usage

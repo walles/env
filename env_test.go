@@ -155,3 +155,33 @@ func TestGetTimestamp(t *testing.T) {
 	location := time.FixedZone("UTC+8", 8*60*60)
 	is.True(parsed.Equal(time.Date(2022, 3, 4, 5, 6, 7, 0, location)))
 }
+
+func TestGetMap(t *testing.T) {
+	is := is.New(t)
+
+	mapString := "a:11,b:22"
+	is.NoErr(os.Setenv("TEST", mapString))
+
+	parsed, err := Get("TEST", Map(String, ":", strconv.Atoi, ","))
+	is.NoErr(err)
+
+	is.Equal(parsed, map[string]int{
+		"a": 11,
+		"b": 22,
+	})
+
+	// Test a broken entry
+	is.NoErr(os.Setenv("TEST", "1:apa:true"))
+	_, err = Get("TEST", Map(strconv.Atoi, ":", String, ","))
+	is.Equal(err.Error(), `Parsing TEST value: Element 1 doesn't have exactly one separator (":"): 1:apa:true`)
+
+	// Test a malformed key
+	is.NoErr(os.Setenv("TEST", "apa:fisk"))
+	_, err = Get("TEST", Map(strconv.Atoi, ":", String, ","))
+	is.Equal(err.Error(), `Parsing TEST value: Key 1: strconv.Atoi: parsing "apa": invalid syntax`)
+
+	// Test a malformed value
+	is.NoErr(os.Setenv("TEST", "apa:fisk"))
+	_, err = Get("TEST", Map(String, ":", strconv.Atoi, ","))
+	is.Equal(err.Error(), `Parsing TEST value: Value 1: strconv.Atoi: parsing "fisk": invalid syntax`)
+}
