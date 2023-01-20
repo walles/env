@@ -49,6 +49,7 @@ go get github.com/walles/env
 
 # Alternatives
 
-If you like bindings based APIs better then this one seems popular:
+If you like bindings based APIs better then these ones seem popular:
 
 * <https://github.com/kelseyhightower/envconfig>
+* <https://github.com/caarlos0/env>
