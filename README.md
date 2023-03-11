@@ -13,7 +13,7 @@ import "github.com/walles/env"
 enabled := env.GetOr("ENABLED", strconv.ParseBool, false)
 
 // Duration will be of type time.Duration
-duration, err := env.Get("PORT", time.ParseDuration)
+duration, err := env.Get("TIMEOUT", time.ParseDuration)
 
 // Username will be of type string. If it's not set in the environment,
 // then MustGet will panic.
@@ -31,12 +31,12 @@ fluffyNumber, err := env.Get("FLOAT", env.WithBitSize(strconv.ParseFloat, 64))
 number, err := env.Get("HEX", env.WithBaseAndBitSize(strconv.ParseUint, 0, 64))
 
 // Timestamp will be of type time.Time
-timestamp, err := Get("TIMESTAMP", WithTimeSpec(time.Parse, time.RFC3339))
+timestamp, err := env.Get("TIMESTAMP", env.WithTimeSpec(time.Parse, time.RFC3339))
 
 // UsersAndScores will be of type map[string]int.
 //
 // In this case, "Adam:50,Eva:60" will be parsed into { "Adam":50, "Eva":60 }.
-usersAndScores, err := Get("USERS_AND_SCORES", Map(String, ":", strconv.Atoi, ","))
+usersAndScores, err := env.Get("USERS_AND_SCORES", Map(env.String, ":", strconv.Atoi, ","))
 ```
 
 # Installing
