@@ -6,11 +6,21 @@ import (
 	"strings"
 )
 
+type parseError struct {
+	message string
+}
+
+func (pe parseError) Error() string {
+	return pe.message
+}
+
 // Get a value from environment and run it through the parse function. Return
 // the result if there was one.
 //
 // If the parsing fails or if the variable was not set an error will be
 // returned.
+//
+// Parse errors vs not-set errors can be told apart using env.IsParseError().
 //
 // # Example Usage
 //
@@ -25,10 +35,22 @@ func Get[V any](environmentVariableName string, parse func(string) (V, error)) (
 	parsedValue, err := parse(rawValue)
 	if err != nil {
 		var noResult V
-		return noResult, fmt.Errorf("Parsing %s value: %w", environmentVariableName, err)
+		return noResult, parseError{
+			message: fmt.Sprintf("Parsing %s value: %v", environmentVariableName, err),
+		}
 	}
 
 	return parsedValue, nil
+}
+
+// Returns true if this was a parse error returned by env.Get(). False usually
+// means an env.Get() error is because the variable was not set.
+//
+// False will also be returned if the error was nil (not an error), or if it's
+// not from env.Get().
+func IsParseError(err error) bool {
+	_, isParseError := err.(parseError)
+	return isParseError
 }
 
 // Get a value from environment and run it through the parse function. Return

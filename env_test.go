@@ -185,3 +185,19 @@ func TestGetMap(t *testing.T) {
 	_, err = Get("TEST", Map(String, ":", strconv.Atoi, ","))
 	is.Equal(err.Error(), `Parsing TEST value: Value 1: strconv.Atoi: parsing "fisk": invalid syntax`)
 }
+
+func TestIsParseError(t *testing.T) {
+	is := is.New(t)
+
+	is.NoErr(os.Setenv("TEST", "This is not an int"))
+	_, err := Get("TEST", strconv.Atoi)
+	is.True(err != nil)
+	is.True(IsParseError(err))
+
+	is.NoErr(os.Unsetenv("TEST"))
+	_, err = Get("TEST", strconv.Atoi)
+	is.True(err != nil)
+	is.True(!IsParseError(err))
+
+	is.True(!IsParseError(nil))
+}
